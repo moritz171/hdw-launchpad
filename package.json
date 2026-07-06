@@ -1,0 +1,30 @@
+{
+  "name": "hdw-launchpad",
+  "version": "1.0.0",
+  "description": "HDW Launchpad - Generate, deploy & generate QR codes for video projects",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js",
+    "build": "echo 'Build complete'"
+  },
+  "keywords": [
+    "hdw",
+    "launchpad",
+    "dashboard",
+    "qr-code",
+    "deployment"
+  ],
+  "author": "moritz@heavy-media.de",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "qrcode": "^1.5.3",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {}
+}

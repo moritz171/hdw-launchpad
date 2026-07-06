@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html class="dark" lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HDW Launchpad &amp; QR-Generator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=JetBrains+Mono:wght@400;700&amp;family=Hanken+Grotesk:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface": "#dbe3f2",
+                    "surface-container-high": "#232b36",
+                    "primary-container": "#ff6600",
+                    "on-secondary": "#2f3131",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "tertiary-fixed": "#d0e4ff",
+                    "primary-fixed-dim": "#ffb596",
+                    "on-primary-fixed": "#360f00",
+                    "on-tertiary-fixed": "#001d35",
+                    "on-primary-container": "#561d00",
+                    "surface-container-low": "#141c27",
+                    "outline": "#aa8a7d",
+                    "deep-obsidian": "#000000",
+                    "on-surface-variant": "#e3bfb1",
+                    "background": "#0c141e",
+                    "inverse-surface": "#dbe3f2",
+                    "secondary-container": "#454747",
+                    "on-tertiary": "#003256",
+                    "on-error-container": "#ffdad6",
+                    "tertiary": "#9ccaff",
+                    "slate-steel": "#2C3746",
+                    "surface-dim": "#0c141e",
+                    "surface-container-lowest": "#070f19",
+                    "secondary": "#c6c6c7",
+                    "inverse-on-surface": "#29313c",
+                    "on-primary-fixed-variant": "#7c2e00",
+                    "inverse-primary": "#a33e00",
+                    "on-error": "#690005",
+                    "primary": "#ffb596",
+                    "on-background": "#dbe3f2",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "error-container": "#93000a",
+                    "secondary-fixed": "#e2e2e2",
+                    "on-tertiary-fixed-variant": "#00497b",
+                    "surface-bright": "#323a45",
+                    "on-secondary-container": "#b4b5b5",
+                    "surface-variant": "#2d3541",
+                    "on-secondary-fixed-variant": "#454747",
+                    "caution-orange": "#E65C00",
+                    "outline-variant": "#5a4136",
+                    "surface-container-highest": "#2d3541",
+                    "surface-container": "#18202b",
+                    "tertiary-fixed-dim": "#9ccaff",
+                    "on-primary": "#581e00",
+                    "surface": "#0c141e",
+                    "primary-fixed": "#ffdbcd",
+                    "on-tertiary-container": "#003155",
+                    "error": "#ffb4ab",
+                    "tertiary-container": "#009cfc",
+                    "surface-tint": "#ffb596"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "max-width": "1280px",
+                    "margin-desktop": "64px",
+                    "margin-mobile": "16px",
+                    "base": "8px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Montserrat"],
+                    "headline-lg": ["Montserrat"],
+                    "label-bold": ["JetBrains Mono"],
+                    "label-sm": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "headline-xl": ["Montserrat"],
+                    "body-md": ["Hanken Grotesk"],
+                    "body-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                    "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                    "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "900"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        background-color: #000000;
+        color: #dbe3f2;
+        font-family: 'Hanken Grotesk', sans-serif;
+      }
+      .industrial-border {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .pulsating-led {
+        box-shadow: 0 0 8px #4ade80;
+        animation: pulse-green 1.5s infinite;
+      }
+      @keyframes pulse-green {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+      }
+      .terminal-scroll::-webkit-scrollbar {
+        width: 4px;
+      }
+      .terminal-scroll::-webkit-scrollbar-thumb {
+        background: #2C3746;
+      }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-deep-obsidian flex justify-between items-center w-full px-margin-desktop py-4 max-w-max-width mx-auto border-b border-white/10">
+<div class="font-headline-lg text-headline-lg font-black text-primary-container tracking-tighter uppercase">
+            HELDEN DER WERKSTATT <span class="font-light text-on-surface opacity-50 ml-2">LAUNCHPAD</span>
+</div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-label-bold text-label-bold uppercase text-primary-container border-b-2 border-primary-container pb-1" href="#">Dashboard</a>
+<a class="font-label-bold text-label-bold uppercase text-on-surface hover:text-primary transition-colors" href="#">Tools</a>
+<a class="font-label-bold text-label-bold uppercase text-on-surface hover:text-primary transition-colors" href="#">Stats</a>
+<button class="bg-primary-container text-deep-obsidian font-label-bold text-label-bold px-6 py-2 uppercase hover:bg-caution-orange transition-all duration-200 active:scale-95">
+                LOGIN
+            </button>
+</nav>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-max-width mx-auto px-margin-desktop py-12">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Left Column: Control Center (5/12) -->
+<section class="md:col-span-5 flex flex-col gap-8">
+<div class="bg-surface-container-high industrial-border p-8 relative overflow-hidden group">
+<div id="dropZone" class="border-2 border-dashed border-slate-steel hover:border-caution-orange transition-colors rounded-lg p-6 bg-deep-obsidian/50 mb-6 flex flex-col items-center justify-center cursor-pointer group/upload">
+<span class="material-symbols-outlined text-secondary mb-2 text-4xl group-hover/upload:text-primary-container transition-colors">upload_file</span>
+<p class="text-on-surface text-label-sm font-medium">Master-Template (.html) hier ablegen</p>
+<input type="file" id="templateInput" accept=".html" style="display: none;">
+<button type="button" id="uploadBtn" class="mt-3 px-4 py-1.5 bg-slate-steel hover:bg-surface-container-highest text-white text-label-sm rounded transition-colors">
+    Oder Datei auswählen
+  </button>
+<p class="text-label-sm text-green-400 mt-2 hidden" id="template-status">Template geladen ✓</p>
+</div>
+<div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-6xl" style="font-variation-settings: 'FILL' 1;">settings</span>
+</div>
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-primary-container">clear</span>
+<h2 class="font-headline-md text-headline-md uppercase tracking-tight">1. Projekt-Metadaten</h2>
+</div>
+<form class="flex flex-col gap-6" id="projectForm">
+<div class="flex flex-col gap-2">
+<label class="font-label-bold text-label-bold uppercase text-secondary">Video Titel</label>
+<input id="videoTitle" class="bg-deep-obsidian border border-slate-steel text-on-surface p-4 focus:ring-1 focus:ring-caution-orange focus:border-caution-orange outline-none font-body-md transition-all" placeholder="z.B. Astlöcher mit Zinn ausgießen" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-bold text-label-bold uppercase text-secondary">Videotyp</label>
+<div class="relative">
+<select id="videoType" class="w-full bg-deep-obsidian border border-slate-steel text-on-surface p-4 focus:ring-1 focus:ring-caution-orange focus:border-caution-orange outline-none font-body-md appearance-none transition-all cursor-pointer">
+<option>Bauprojekt</option>
+<option>Technik-Tutorial</option>
+<option>Werkzeug-Test</option>
+<option>Workshop-Vlog</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-secondary">expand_more</span>
+</div>
+</div>
+<div class="mt-4">
+<button type="submit" class="w-full bg-primary-container text-deep-obsidian font-headline-md text-headline-md py-6 px-4 uppercase flex items-center justify-center gap-4 hover:bg-caution-orange transition-all duration-300 group shadow-lg shadow-primary-container/10" id="launchBtn">
+<span class="w-3 h-3 bg-green-400 rounded-full pulsating-led"></span>
+                                PROJEKT INITIALISIEREN &amp; AUF VERCEL LAUNCHEN
+                            </button>
+</div>
+</form>
+</div>
+<div class="bg-surface-container-low industrial-border p-6 border-l-4 border-l-caution-orange">
+<p class="font-label-sm text-label-sm text-secondary uppercase mb-2">SYSTEM STATUS</p>
+<div id="systemStatus" class="flex items-center gap-4">
+<div class="flex-grow bg-slate-steel h-2 rounded-full overflow-hidden">
+<div class="bg-caution-orange h-full w-1/4"></div>
+</div>
+<span class="font-label-bold text-label-bold text-primary-container">25% CPU</span>
+</div>
+</div>
+</section>
+<!-- Right Column: Output & Assets (7/12) -->
+<section class="md:col-span-7 flex flex-col gap-gutter">
+<!-- QR-Code Terminal -->
+<div class="bg-surface-container-high industrial-border p-8 flex flex-col items-center justify-center min-h-[400px]">
+<div class="mb-6">
+<h3 class="font-label-bold text-label-bold uppercase text-center text-secondary tracking-widest mb-8">QR-CODE TERMINAL</h3>
+<div id="qrContainer" class="w-[250px] h-[250px] bg-white p-4 industrial-border shadow-2xl relative group cursor-pointer hidden">
+<img id="qrImage" class="w-full h-full object-contain" src="" alt="QR-Code"/>
+<div class="absolute inset-0 bg-primary-container/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-4xl">zoom_in</span>
+</div>
+</div>
+<div id="noQrPlaceholder" class="w-[250px] h-[250px] bg-slate-steel/30 p-4 industrial-border shadow-2xl flex items-center justify-center">
+<p class="text-center text-secondary text-label-sm">Warte auf QR-Code...</p>
+</div>
+</div>
+<button id="downloadQrBtn" type="button" class="bg-transparent border-2 border-white text-white font-label-bold text-label-bold px-8 py-3 uppercase hover:bg-white/10 transition-all flex items-center gap-2 hidden">
+<span class="material-symbols-outlined">download</span>
+                        QR-CODE HERUNTERLADEN (.PNG)
+                    </button>
+</div>
+<!-- Deployment Live-Status -->
+<div class="bg-deep-obsidian industrial-border overflow-hidden flex flex-col h-[300px]">
+<div class="bg-slate-steel/50 px-4 py-2 border-b border-white/5 flex items-center justify-between">
+<div class="flex gap-2">
+<div id="statusLed1" class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+<div id="statusLed2" class="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
+<div id="statusLed3" class="w-2.5 h-2.5 rounded-full bg-green-500/50"></div>
+</div>
+<span class="font-label-sm text-label-sm uppercase text-secondary/50 tracking-tighter">DEPLOYMENT_LOGS</span>
+</div>
+<div id="terminalLogs" class="p-6 font-label-sm text-label-sm terminal-scroll overflow-y-auto flex-grow space-y-2">
+<p class="text-secondary/60"><span class="text-secondary/40">[--:--:--]</span> &gt; Warte auf Projekt-Initialisierung...</p>
+</div>
+<div class="pt-4 border-t border-white/5 mt-4 p-4 hidden" id="deploymentUrlSection">
+<div id="deploymentUrlContainer" class="flex items-center gap-3 bg-surface-container-high/50 p-4 rounded group cursor-pointer hover:bg-surface-container-high transition-colors border border-white/5">
+<span class="material-symbols-outlined text-primary-container">link</span>
+<span class="text-white font-label-bold text-label-bold">Live-URL:</span>
+<a id="deploymentLink" class="text-primary-container underline decoration-primary-container/30 hover:decoration-primary-container transition-all" href="#" target="_blank">...</a>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-margin-desktop border-t border-white/10 mt-20 bg-surface-container-lowest">
+<div class="max-w-max-width mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex flex-col gap-2">
+<div class="font-headline-md text-headline-md font-bold text-on-surface uppercase">HELDEN DER WERKSTATT</div>
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">© 2026 ALL RIGHTS RESERVED. PROFESSIONAL GRADE EQUIPMENT.</p>
+</div>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm uppercase text-secondary hover:text-on-surface transition-colors" href="#">Impressum</a>
+<a class="font-label-sm text-label-sm uppercase text-secondary hover:text-on-surface transition-colors" href="#">Datenschutz</a>
+<a class="font-label-sm text-label-sm uppercase text-secondary hover:text-on-surface transition-colors" href="#">Kontakt</a>
+<a class="font-label-sm text-label-sm uppercase text-secondary hover:text-on-surface transition-colors" href="#">Affiliate-Disclaimer</a>
+</div>
+</div>
+</footer>
+<script>
+  // DOM Elements
+  const uploadBtn = document.getElementById('uploadBtn');
+  const templateInput = document.getElementById('templateInput');
+  const dropZone = document.getElementById('dropZone');
+  const projectForm = document.getElementById('projectForm');
+  const launchBtn = document.getElementById('launchBtn');
+  const terminalLogs = document.getElementById('terminalLogs');
+  const qrContainer = document.getElementById('qrContainer');
+  const noQrPlaceholder = document.getElementById('noQrPlaceholder');
+  const qrImage = document.getElementById('qrImage');
+  const downloadQrBtn = document.getElementById('downloadQrBtn');
+  const deploymentUrlSection = document.getElementById('deploymentUrlSection');
+  const deploymentLink = document.getElementById('deploymentLink');
+  const templateStatus = document.getElementById('template-status');
+
+  let currentProjectId = null;
+  let templateLoaded = false;
+
+  // Log function
+  function addLog(message, type = 'info') {
+    const timestamp = new Date().toLocaleTimeString('de-DE');
+    const color = type === 'success' ? 'text-green-400' : type === 'error' ? 'text-red-400' : 'text-green-400 opacity-80';
+    const logLine = document.createElement('p');
+    logLine.className = `${color}`;
+    logLine.innerHTML = `<span class="text-secondary/40">[${timestamp}]</span> &gt; ${message}`;
+    terminalLogs.appendChild(logLine);
+    terminalLogs.scrollTop = terminalLogs.scrollHeight;
+  }
+
+  // Template upload
+  uploadBtn.addEventListener('click', () => templateInput.click());
+
+  templateInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('template', file);
+
+    try {
+      addLog('Template wird hochgeladen...');
+      const response = await fetch('/api/upload-template', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) throw new Error('Upload fehlgeschlagen');
+
+      const data = await response.json();
+      templateLoaded = true;
+      templateStatus.classList.remove('hidden');
+      dropZone.classList.add('opacity-75');
+      addLog('✓ Template erfolgreich geladen', 'success');
+    } catch (error) {
+      addLog(`✗ Error: ${error.message}`, 'error');
+    }
+  });
+
+  // Drag & Drop
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('bg-primary-container/10');
+  });
+
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('bg-primary-container/10');
+  });
+
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('bg-primary-container/10');
+    templateInput.files = e.dataTransfer.files;
+    templateInput.dispatchEvent(new Event('change'));
+  });
+
+  // Launch project
+  projectForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!templateLoaded) {
+      addLog('✗ Bitte Template hochladen', 'error');
+      return;
+    }
+
+    const title = document.getElementById('videoTitle').value;
+    const type = document.getElementById('videoType').value;
+
+    if (!title || !type) {
+      addLog('✗ Titel und Videotyp erforderlich', 'error');
+      return;
+    }
+
+    launchBtn.disabled = true;
+    launchBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">autorenew</span> INITIALISIERT...';
+
+    try {
+      addLog(`Starte Projekt: "${title}"...`);
+
+      const response = await fetch('/api/launch-project', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, type })
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error);
+      }
+
+      const project = await response.json();
+      currentProjectId = project.projectId;
+
+      addLog(`✓ Projekt generiert: ${project.projectId}`, 'success');
+      addLog(`QR-Code erstellt für: ${project.deploymentUrl}`);
+
+      // Show QR Code
+      qrImage.src = `/api/download-qr/${project.projectId}`;
+      noQrPlaceholder.classList.add('hidden');
+      qrContainer.classList.remove('hidden');
+      downloadQrBtn.classList.remove('hidden');
+      downloadQrBtn.onclick = () => {
+        window.location.href = `/api/download-qr/${project.projectId}`;
+      };
+
+      // Show deployment URL
+      deploymentUrlSection.classList.remove('hidden');
+      deploymentLink.href = project.deploymentUrl;
+      deploymentLink.textContent = project.deploymentUrl;
+
+      addLog(`✓ Bereit zum Deployment auf Vercel`, 'success');
+
+      // Push to GitHub
+      addLog('Pushing zu GitHub...');
+      const githubResponse = await fetch('/api/push-to-github', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectId: project.projectId })
+      });
+
+      if (githubResponse.ok) {
+        const githubData = await githubResponse.json();
+        addLog(`✓ GitHub Repo erstellt`, 'success');
+        if (githubData.githubUrl && !githubData.githubUrl.includes('ausstehend')) {
+          addLog(`Repository: ${githubData.githubUrl}`);
+        }
+      } else {
+        addLog('ℹ GitHub-Push ausstehend (Optional)', 'info');
+      }
+
+      addLog(`🚀 PROJEKT BEREIT ZUM DEPLOYMENT`, 'success');
+    } catch (error) {
+      addLog(`✗ Fehler: ${error.message}`, 'error');
+    } finally {
+      launchBtn.disabled = false;
+      launchBtn.innerHTML = '<span class="w-3 h-3 bg-green-400 rounded-full pulsating-led"></span> PROJEKT INITIALISIEREN & AUF VERCEL LAUNCHEN';
+    }
+  });
+
+  // System Status Indicator
+  let cpuLevel = 25;
+  setInterval(() => {
+    cpuLevel = Math.floor(Math.random() * 100);
+    const indicator = document.querySelector('#systemStatus .bg-caution-orange');
+    if (indicator) {
+      indicator.style.width = cpuLevel + '%';
+      indicator.parentElement.nextElementSibling.textContent = cpuLevel + '% CPU';
+    }
+  }, 2000);
+
+  // Initial log
+  addLog('HDW Launchpad aktiv');
+</script>
+</body></html>
