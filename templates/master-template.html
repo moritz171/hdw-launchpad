@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>&lt;!-- INJECT_TITLE --&gt;{{PAGE_TITLE}}</title><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=Hanken+Grotesk:wght@400;500;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#dbe3f2",
+                        "outline-variant": "#5a4136",
+                        "tertiary": "#9ccaff",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "on-primary-container": "#561d00",
+                        "error": "#ffb4ab",
+                        "secondary": "#c6c6c7",
+                        "secondary-container": "#454747",
+                        "deep-obsidian": "#000000",
+                        "on-secondary": "#2f3131",
+                        "primary": "#ffb596",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-primary-fixed-variant": "#7c2e00",
+                        "primary-fixed-dim": "#ffb596",
+                        "on-secondary-container": "#b4b5b5",
+                        "caution-orange": "#E65C00",
+                        "tertiary-container": "#009cfc",
+                        "surface-variant": "#2d3541",
+                        "surface-dim": "#0c141e",
+                        "inverse-on-surface": "#29313c",
+                        "on-secondary-fixed-variant": "#454747",
+                        "inverse-surface": "#dbe3f2",
+                        "on-tertiary": "#003256",
+                        "on-background": "#dbe3f2",
+                        "surface-bright": "#323a45",
+                        "surface-container-lowest": "#070f19",
+                        "inverse-primary": "#a33e00",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed": "#001d35",
+                        "surface-container-low": "#141c27",
+                        "on-tertiary-container": "#003155",
+                        "surface-container": "#18202b",
+                        "background": "#0c141e",
+                        "on-surface-variant": "#e3bfb1",
+                        "tertiary-fixed-dim": "#9ccaff",
+                        "outline": "#aa8a7d",
+                        "surface-tint": "#ffb596",
+                        "tertiary-fixed": "#d0e4ff",
+                        "surface": "#0c141e",
+                        "on-tertiary-fixed-variant": "#00497b",
+                        "slate-steel": "#2C3746",
+                        "primary-container": "#ff6600",
+                        "surface-container-high": "#232b36",
+                        "primary-fixed": "#ffdbcd",
+                        "on-primary": "#581e00",
+                        "secondary-fixed": "#e2e2e2",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#2d3541",
+                        "on-primary-fixed": "#360f00",
+                        "on-error": "#690005"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "base": "8px",
+                        "max-width": "1280px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Montserrat"],
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-xl": ["Montserrat"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "label-bold": ["JetBrains Mono"],
+                        "headline-md": ["Montserrat"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "label-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "900" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "label-bold": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    }catch(_e){}</script></head><body class="bg-background dark:bg-background text-on-surface font-body-md min-h-screen pb-[80px]">
+<!-- TopAppBar Shared Component -->
+<header class="fixed top-0 w-full z-50 border-b border-white/10 bg-background/90 backdrop-blur-md">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full">
+<div class="flex items-center gap-2">
+<img alt="Creator Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVW4Hhi6JfU5KzOauCxeC-0PVwgGwFy29O1_Vy379luv4oKdhCues2ybbj86zrEZD0GIJvG-WlscdvaJ8W3DHuvpwQkowbAl599O19SnCNO52AMI13MU6m9PyqCacs6ob3D_uWhzfKOQudQzcFRY2rDjzIRquCnT4WuRL_3mXn_qoLaMYa1RaO2wYeSvHSS4LN4t2472E_xlFaxHQI_bPuWUEZYSlIDdlGoSrG0aefHNqnA1JIVyvUL-XScEMjYRGlJg"/>
+<span class="text-headline-md font-headline-md font-black text-primary uppercase tracking-tighter border-l-4 border-caution-orange pl-2"><!-- INJECT_TITLE -->{{PAGE_TITLE}}</span>
+</div>
+<div class="hidden md:flex gap-6">
+<!-- Desktop nav elements mapped from bottom nav logic -->
+<a class="text-primary font-bold hover:text-caution-orange transition-colors duration-200" href="#">
+<span class="material-symbols-outlined align-middle mr-1" data-icon="construction">construction</span>WERKZEUGE
+                 </a>
+<a class="text-on-surface-variant font-medium hover:text-caution-orange transition-colors duration-200" href="#">
+<span class="material-symbols-outlined align-middle mr-1" data-icon="architecture">architecture</span>PLÄNE
+                 </a>
+<a class="text-on-surface-variant font-medium hover:text-caution-orange transition-colors duration-200" href="#">
+<span class="material-symbols-outlined align-middle mr-1" data-icon="local_offer">local_offer</span>DEALS
+                 </a>
+<a class="text-on-surface-variant font-medium hover:text-caution-orange transition-colors duration-200" href="#">
+<span class="material-symbols-outlined align-middle mr-1" data-icon="play_circle">play_circle</span>SHORTS
+                 </a>
+</div>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</button>
+</div>
+</header>
+<main class="pt-24 px-margin-mobile md:px-margin-desktop max-w-max-width mx-auto flex flex-col gap-16 pb-12 px-[5%]">
+<!-- Block 1: Werkzeuge & Material (Tools List) -->
+<section class="scroll-mt-24" id="werkzeuge">
+<div class="mb-6 border-b border-glass-subtle pb-2">
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-white uppercase tracking-tight flex items-center gap-3"><span class="material-symbols-outlined text-caution-orange" style="font-variation-settings: 'FILL' 1;">construction</span>WICHTIGES ZUBEHÖR</h2>
+</div>
+<div class="flex flex-col gap-3">
+<!-- INJECT_AFFILIATE -->
+<div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Einhell 18V Akku-Bohrschrauber TE-CD 18/48 Li-Solo Power X-Change (Drehmoment 48 Nm, 2-Gang-Getriebe, LED-Licht, ohne Akku)</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Metabo Kappsäge KS 216 M Lasercut (1500 Watt, Schnittbreite 120 mm, Sägeblatt-Durchmesser 216 mm, mit Zugfunktion)</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div></div>
+<div class="mt-8 mb-4 border-b border-white/10 pb-2"><h3 class="text-headline-md font-headline-md font-bold text-white uppercase tracking-tight">WICHTIGES WERKZEUG</h3></div><div class="flex flex-col gap-3"><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div><div class="flex justify-between items-center py-4 gap-4"><span class="text-body-lg font-bold text-white line-clamp-2 flex-1">Artikel</span><button class="bg-primary-container text-deep-obsidian font-bold uppercase px-3 py-2 text-label-sm hover:bg-caution-orange transition-colors rounded-sm w-28 shrink-0 leading-tight">ZUM<br/>ARTIKEL</button></div></div><div class="mt-4 text-center">
+<button class="text-on-surface-variant font-label-sm uppercase hover:text-caution-orange transition-colors">MEHR</button>
+</div>
+</section>
+<!-- Block 2: Bauanleitung & Pläne (Plans) -->
+<section class="scroll-mt-24" id="plaene">
+<div class="mb-6 border-b border-glass-subtle pb-2">
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-white uppercase tracking-tight flex items-center gap-3">
+<span class="material-symbols-outlined text-caution-orange" style="font-variation-settings: 'FILL' 1;">architecture</span>
+                    Bauanleitung &amp; Pläne
+                </h2>
+</div>
+<div class="w-full bg-surface-container-lowest border border-glass-subtle rounded p-4">
+<!-- INJECT_BAUPLAN -->
+<img alt="Technical Drawing" class="w-full h-auto rounded shadow-sharp-40 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmCB9Us0YSb2NsAAMPhLH9yxr67H-ePaGTODSnz8N8T3ofHDRl5svAwo5v69UIqyTq0cAwvhyWSAf49BURzmNaUqpFnqQeQxHTv3ct8-FytYQ2-49loK31YJ-H6ePBgzP-VlqcUf0aCI0uk3pV75n-fV60aCJJbQqIDV3PHQhaqV7h6E8N9z5DSNPvYO4vYSGJbZU73xl3XR2aXSttqHw1yEI-2jFAvil-G_iJnSvH5hmBd1lAmBW-NMJdQZZu5G7k1g"/>
+<button class="w-full mt-6 bg-caution-orange text-deep-obsidian font-headline-md text-label-bold uppercase py-4 hover:bg-primary-container transition-colors rounded-sm flex items-center justify-center gap-2 shadow-sharp-40">DOWNLOAD</button></div>
+</section>
+<!-- Block 3: Aktuelle Deals -->
+<section class="scroll-mt-24" id="deals"><div class="mb-6 border-b border-glass-subtle pb-2"><h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-white uppercase tracking-tight flex items-center gap-3"><span class="material-symbols-outlined text-caution-orange" style="font-variation-settings: 'FILL' 1;">local_offer</span>AKTUELLE DEALS</h2></div><div class="flex flex-col gap-6">
+<!-- INJECT_DEALS -->
+<div class="bg-surface-container-lowest border border-white/5 rounded p-4 flex flex-col gap-4"><div class="aspect-video w-full bg-surface-container-high rounded overflow-hidden"><img alt="Bosch Promo" class="w-full h-full object-cover" src=""/></div><p class="text-body-lg font-bold text-white">Gratis Bosch Akku</p><button class="bg-caution-orange text-deep-obsidian font-label-bold uppercase py-2 rounded-sm hover:bg-primary-container transition-colors">ZU DEN DEALS</button></div><div class="bg-surface-container-lowest border border-white/5 rounded p-4 flex flex-col gap-4"><div class="aspect-video w-full bg-surface-container-high rounded overflow-hidden"><img alt="DeWalt Promo" class="w-full h-full object-cover" src=""/></div><p class="text-body-lg font-bold text-white">Gratis DeWalt Akku</p><button class="bg-caution-orange text-deep-obsidian font-label-bold uppercase py-2 rounded-sm hover:bg-primary-container transition-colors">ZU DEN DEALS</button></div><div class="bg-surface-container-lowest border border-white/5 rounded p-4 flex flex-col gap-4"><div class="aspect-video w-full bg-surface-container-high rounded overflow-hidden"><img alt="Metabo Promo" class="w-full h-full object-cover" src=""/></div><p class="text-body-lg font-bold text-white">Gratis Metabo Akku</p><button class="bg-caution-orange text-deep-obsidian font-label-bold uppercase py-2 rounded-sm hover:bg-primary-container transition-colors">ZU DEN DEALS</button></div></div></section>
+<!-- Block 4: Zuschauerfragen & FAQ (Shorts) -->
+<section class="scroll-mt-24 mb-12" id="shorts">
+<div class="mb-6 border-b border-glass-subtle pb-2">
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-white uppercase tracking-tight flex items-center gap-3">
+<span class="material-symbols-outlined text-caution-orange" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+                    Zuschauerfragen &amp; FAQ
+                </h2>
+</div>
+<div class="flex flex-col gap-12"><div class="flex flex-col gap-12">
+<!-- INJECT_FAQ -->
+<div class="flex flex-row items-center gap-6 cursor-pointer group"><div class="w-1/2 aspect-video relative shrink-0 overflow-hidden rounded-xl shadow-sharp-40"><img alt="FAQ 1" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlcqMpjvbqwDyCQgrsm9GiWwBlPxylEnQxiAQJecrC4ac9t16x0eYBAKWBEl5dcOVBZeqDf19HgUY5sBruKZl4_rdRS-Bj0OkhvoUSJ6XNYYn1jFYaorpI4rcOhHiynjrCJyZnocuCT82E3s9pVxAZIepXyX_gqew3ObL0aSZoIBsfkgf33ZfknnFHifJlER1t7Cp8YA0tY3O3Y8_66nFb37hJ59NdkWG35VKiZ5bQEYl1sr9xy8G5skibSyBw7j9XqA"/><div class="absolute inset-0 flex items-center justify-center"><span class="material-symbols-outlined text-primary-container text-5xl drop-shadow-lg">play_circle</span></div></div><div class="w-1/2 flex items-center"><h3 class="text-body-md font-bold text-white leading-tight line-clamp-2">Welcher Akku für die Kappsäge?</h3></div></div><div class="flex flex-row items-center gap-6 cursor-pointer group"><div class="w-1/2 aspect-video relative shrink-0 overflow-hidden rounded-xl shadow-sharp-40"><img alt="FAQ 2" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDSld1vANCzCR6KDdQzLPCpAyYoBq9zpJv30m9ezwwezbRBgvKe1hnJDDQKmWwKptC4uydnZdmk5OSwPztey9m8Klzf4XC_vgE4cuz_-KzWDR5_nelu0YZz39q9jmOBQFBJ7FhzdElJofvAik6jqFHvRoGxJMtbMYWd6_uDPmu6AXkcb98tLYhB4IpkeYL-zIq5_FGStGN-SDUBF8JY2YgSRH_qqK8JQQyE7gapYMbpb95pdlrYjpuKxcC_WWSvSFu6Q"/><div class="absolute inset-0 flex items-center justify-center"><span class="material-symbols-outlined text-primary-container text-5xl drop-shadow-lg">play_circle</span></div></div><div class="w-1/2 flex items-center"><h3 class="text-body-md font-bold text-white leading-tight line-clamp-2">Alternative zur Tischkreissäge?</h3></div></div></div></div>
+</section>
+</main>
+<!-- BottomNavBar Shared Component (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center py-2 px-4 pb-safe bg-surface-container-lowest border-t border-white/10 z-50 shadow-[0_-4px_10px_rgba(0,0,0,0.4)]">
+<a class="flex flex-col items-center justify-center text-primary font-bold bg-primary/10 rounded-xl px-3 py-1 scale-90 transition-all duration-150" href="#werkzeuge">
+<span class="material-symbols-outlined" data-icon="construction" data-weight="fill" style="font-variation-settings: 'FILL' 1;">construction</span>
+<span class="text-label-sm font-label-sm">WERKZEUGE</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary-fixed-dim hover:bg-white/5 rounded-xl px-3 py-1 transition-all" href="#plaene">
+<span class="material-symbols-outlined" data-icon="architecture">architecture</span>
+<span class="text-label-sm font-label-sm">PLÄNE</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary-fixed-dim hover:bg-white/5 rounded-xl px-3 py-1 transition-all" href="#shorts">
+<span class="material-symbols-outlined" data-icon="play_circle">play_circle</span>
+<span class="text-label-sm font-label-sm">SHORTS</span>
+</a>
+</nav>
+<!-- Footer Shared Component -->
+<footer class="w-full py-12 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-base border-t border-white/5 bg-deep-obsidian pb-24 md:pb-12">
+<div class="text-headline-sm font-headline-md text-on-surface font-black tracking-tighter uppercase mb-4 md:mb-0">
+            CREATOR_CORE
+        </div>
+<div class="text-body-md font-body-md text-secondary-fixed-dim text-center mb-4 md:mb-0">
+            © 2024 INDUSTRIAL MAKER. ALL RIGHTS RESERVED.
+        </div>
+<div class="flex gap-4 text-label-sm font-label-sm text-on-secondary-container">
+<a class="hover:text-white transition-colors" href="#">Impressum</a>
+<a class="hover:text-white transition-colors" href="#">Datenschutz</a>
+<a class="hover:text-white transition-colors" href="#">Kontakt</a>
+</div>
+</footer>
+</body></html>

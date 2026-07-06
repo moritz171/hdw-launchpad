@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{VIDEO_TITLE}} - HDW</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Hanken Grotesk', sans-serif; background: #000; color: #dbe3f2; }
+        header { background: #232b36; padding: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .container { max-width: 1280px; margin: 0 auto; padding: 2rem; }
+        h1 { color: #ff6600; font-size: 2rem; margin: 1rem 0; }
+        .meta { color: #c6c6c7; margin: 1rem 0; }
+        .content { margin: 2rem 0; line-height: 1.6; }
+        footer { text-align: center; padding: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: #c6c6c7; font-size: 0.875rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{VIDEO_TITLE}}</h1>
+        <p class="meta">Videotyp: {{VIDEO_TYPE}}</p>
+        <p class="meta">Projekt-ID: {{PROJECT_ID}}</p>
+    </header>
+    <div class="container">
+        <div class="content">
+            <h2>Willkommen!</h2>
+            <p>Dies ist dein HDW Launchpad-Projekt.</p>
+            <p>Generiert: {{GENERATED_AT}}</p>
+            <p>Live unter: <a href="{{DEPLOYMENT_URL}}" style="color: #ff6600;">{{DEPLOYMENT_URL}}</a></p>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2026 Helden der Werkstatt | Projekt: {{PROJECT_ID}}</p>
+    </footer>
+</body>
+</html>

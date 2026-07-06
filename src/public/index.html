@@ -334,7 +334,7 @@
     templateInput.dispatchEvent(new Event('change'));
   });
 
-  // Launch project
+  // Launch project - VOLLSTÄNDIGE DEPLOYMENT-PIPELINE
   projectForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -352,10 +352,33 @@
     }
 
     launchBtn.disabled = true;
-    launchBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">autorenew</span> INITIALISIERT...';
+    launchBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">autorenew</span> STARTE PIPELINE...';
 
     try {
-      addLog(`Starte Projekt: "${title}"...`);
+      addLog(`🚀 Starte Deployment-Pipeline für: "${title}"...`);
+      addLog('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+      // Definiere die Deploy-Schritte
+      const steps = [
+        { name: '1️⃣ TITEL-INJEKTION', task: 'Injiziere Titel in HTML-Template...' },
+        { name: '2️⃣ DATEI SPEICHERN', task: 'Speichere generierte HTML...' },
+        { name: '3️⃣ GIT INITIALISIEREN', task: 'Initialisiere Git-Repository...' },
+        { name: '4️⃣ GITHUB REPO', task: 'Erstelle GitHub-Repository...' },
+        { name: '5️⃣ PUBLIC SETZEN', task: 'Stelle Repository auf public...' },
+        { name: '6️⃣ GIT PUSH', task: 'Pushe Code zu GitHub (main branch)...' },
+        { name: '7️⃣ QR-CODE', task: 'Generiere QR-Code für Live-URL...' }
+      ];
+
+      // Zeige die Steps an
+      steps.forEach((step, idx) => {
+        setTimeout(() => {
+          addLog(`${step.name}`);
+          addLog(`   └→ ${step.task}`);
+        }, idx * 100);
+      });
+
+      // Starte API-Call mit Verzögerung damit Steps angezeigt werden
+      await new Promise(resolve => setTimeout(resolve, 800));
 
       const response = await fetch('/api/launch-project', {
         method: 'POST',
@@ -365,55 +388,62 @@
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error);
+        throw new Error(error.error || 'Deployment fehlgeschlagen');
       }
 
       const project = await response.json();
       currentProjectId = project.projectId;
 
-      addLog(`✓ Projekt generiert: ${project.projectId}`, 'success');
-      addLog(`QR-Code erstellt für: ${project.deploymentUrl}`);
+      addLog('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      addLog(`✅ DEPLOYMENT ERFOLGREICH!`, 'success');
+      addLog(`Projekt-ID: ${project.projectId}`, 'success');
 
       // Show QR Code
-      qrImage.src = `/api/download-qr/${project.projectId}`;
-      noQrPlaceholder.classList.add('hidden');
-      qrContainer.classList.remove('hidden');
-      downloadQrBtn.classList.remove('hidden');
-      downloadQrBtn.onclick = () => {
-        window.location.href = `/api/download-qr/${project.projectId}`;
-      };
+      setTimeout(() => {
+        qrImage.src = project.qrCodePath;
+        noQrPlaceholder.classList.add('hidden');
+        qrContainer.classList.remove('hidden');
+        downloadQrBtn.classList.remove('hidden');
+        downloadQrBtn.onclick = () => {
+          // Starte Download via Backend
+          fetch(`/api/download-qr/${project.projectId}`)
+            .then(r => r.blob())
+            .then(blob => {
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `qr-${project.projectId}.png`;
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+            });
+        };
 
-      // Show deployment URL
-      deploymentUrlSection.classList.remove('hidden');
-      deploymentLink.href = project.deploymentUrl;
-      deploymentLink.textContent = project.deploymentUrl;
+        // Show deployment URL
+        deploymentUrlSection.classList.remove('hidden');
+        deploymentLink.href = project.vercelUrl;
+        deploymentLink.textContent = project.vercelUrl;
 
-      addLog(`✓ Bereit zum Deployment auf Vercel`, 'success');
+        addLog(`🌐 Live-URL: ${project.vercelUrl}`, 'success');
+        addLog(`📦 GitHub-Repo: ${project.githubUrl}`, 'success');
+        addLog(`🎯 QR-Code generiert und bereit zum Download`, 'success');
 
-      // Push to GitHub
-      addLog('Pushing zu GitHub...');
-      const githubResponse = await fetch('/api/push-to-github', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ projectId: project.projectId })
-      });
+        // Status LEDs animieren
+        document.getElementById('statusLed1').classList.remove('bg-red-500/50');
+        document.getElementById('statusLed1').classList.add('bg-green-500/50');
+        document.getElementById('statusLed2').classList.remove('bg-yellow-500/50');
+        document.getElementById('statusLed2').classList.add('bg-green-500/50');
 
-      if (githubResponse.ok) {
-        const githubData = await githubResponse.json();
-        addLog(`✓ GitHub Repo erstellt`, 'success');
-        if (githubData.githubUrl && !githubData.githubUrl.includes('ausstehend')) {
-          addLog(`Repository: ${githubData.githubUrl}`);
-        }
-      } else {
-        addLog('ℹ GitHub-Push ausstehend (Optional)', 'info');
-      }
+        addLog('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        addLog('🎉 ALLES READY! Projekt ist live auf Vercel.', 'success');
+      }, 500);
 
-      addLog(`🚀 PROJEKT BEREIT ZUM DEPLOYMENT`, 'success');
     } catch (error) {
-      addLog(`✗ Fehler: ${error.message}`, 'error');
+      addLog(`✗ FEHLER: ${error.message}`, 'error');
+      addLog(`Tipps: Stelle sicher, dass gh auth login ausgeführt wurde`, 'error');
     } finally {
       launchBtn.disabled = false;
-      launchBtn.innerHTML = '<span class="w-3 h-3 bg-green-400 rounded-full pulsating-led"></span> PROJEKT INITIALISIEREN & AUF VERCEL LAUNCHEN';
+      launchBtn.innerHTML = '<span class="w-3 h-3 bg-green-400 rounded-full pulsating-led"></span> PROJEKT INITIALISIEREN &amp; AUF VERCEL LAUNCHEN';
     }
   });
 
