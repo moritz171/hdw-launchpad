@@ -203,6 +203,20 @@ app.post('/api/launch-project', async (req, res) => {
       'utf-8'
     );
 
+    // Erstelle vercel.json mit Public-Deployment Konfiguration
+    // deploymentProtection.vercelAuthentication: false = Kein Login erforderlich
+    const vercelConfig = {
+      deploymentProtection: {
+        vercelAuthentication: false
+      }
+    };
+    fs.writeFileSync(
+      path.join(projectDir, 'vercel.json'),
+      JSON.stringify(vercelConfig, null, 2),
+      'utf-8'
+    );
+    console.log(`   ✓ vercel.json erstellt (deploymentProtection deaktiviert)`);
+
     // ========== STEP 3: VERCEL DEPLOYMENT (DIREKT, NICHT VIA GITHUB) ==========
     console.log('[STEP 3] Deploye direkt zu Vercel mit CLI...');
 
