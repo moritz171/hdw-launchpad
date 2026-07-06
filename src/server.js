@@ -222,9 +222,10 @@ app.post('/api/launch-project', async (req, res) => {
 
     let vercelUrl = null;
     try {
-      // Vercel CLI Befehl (Token verweist bereits auf Personal Account)
-      const vercelCmd = `npx vercel --prod --yes --token=${process.env.VERCEL_TOKEN}`;
-      console.log(`   Executing: npx vercel --prod --yes --token=[TOKEN]`);
+      // Vercel CLI Befehl mit Team-Scope (HDW Affiliate)
+      const vercelScope = process.env.VERCEL_ORG_ID || 'HDW Affiliate';
+      const vercelCmd = `npx vercel --prod --yes --token=${process.env.VERCEL_TOKEN} --scope="${vercelScope}"`;
+      console.log(`   Executing: npx vercel --prod --yes --token=[TOKEN] --scope="${vercelScope}"`);
 
       const vercelOutput = execSync(vercelCmd, {
         cwd: projectDir,
@@ -248,7 +249,7 @@ app.post('/api/launch-project', async (req, res) => {
       // Stelle sicher, dass das Projekt öffentlich ist (ohne Login)
       try {
         console.log(`   [INFO] Verifiziere Public-Status des Deployments...`);
-        const linkCmd = `npx vercel link --yes --token=${process.env.VERCEL_TOKEN}`;
+        const linkCmd = `npx vercel link --yes --token=${process.env.VERCEL_TOKEN} --scope="${vercelScope}"`;
         execSync(linkCmd, {
           cwd: projectDir,
           encoding: 'utf-8',
