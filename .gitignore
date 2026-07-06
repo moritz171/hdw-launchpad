@@ -12,3 +12,4 @@ yarn-error.log*
 # Generierte Projekt-Repos (haben ihre eigenen Git-Repos!)
 projects/*/
 .resources/
+.env
