@@ -222,8 +222,8 @@ app.post('/api/launch-project', async (req, res) => {
 
     let vercelUrl = null;
     try {
-      // Vercel CLI Befehl mit Team-Scope (HDW Affiliate)
-      const vercelScope = process.env.VERCEL_ORG_ID || 'HDW Affiliate';
+      // Vercel CLI Befehl mit Team-Scope (hdw-affiliate)
+      const vercelScope = process.env.VERCEL_ORG_ID || 'hdw-affiliate';
       const vercelCmd = `npx vercel --prod --yes --token=${process.env.VERCEL_TOKEN} --scope="${vercelScope}"`;
       console.log(`   Executing: npx vercel --prod --yes --token=[TOKEN] --scope="${vercelScope}"`);
 
