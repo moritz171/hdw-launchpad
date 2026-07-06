@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "buildCommand": "npm install",
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "regions": ["fra1", "iad1"],
+  "functions": {
+    "src/server.js": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  }
+}
