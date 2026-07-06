@@ -116,29 +116,36 @@ app.post('/api/upload-template', upload.single('template'), (req, res) => {
 });
 
 /**
- * Helper: Führe Git-Befehl aus und gebe Fehler/Output zurück
+ * Helper: Führe Git-Befehl aus
  */
-function executeGitCommand(cmd, cwd, logFn = null) {
+function executeGitCommand(cmd, cwd) {
   try {
     const output = execSync(cmd, { cwd, encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
-    if (logFn) logFn(`✓ ${cmd}`);
     return { success: true, output };
   } catch (error) {
-    if (logFn) logFn(`✗ ${cmd}: ${error.message}`);
     throw error;
   }
 }
 
 /**
+ * Helper: Extrahiere Vercel URL aus vercel CLI Output
+ */
+function extractVercelUrl(output) {
+  const match = output.match(/https:\/\/[^\s]+\.vercel\.app/);
+  return match ? match[0] : null;
+}
+
+/**
  * Route: Projekt initialisieren & vollständige Deployment-Pipeline starten
- * WORKFLOW:
+ *
+ * WORKFLOW (KORRIGIERT):
  * 1. Titel in <title> und Platzhalter injizieren
- * 2. HTML-Datei speichern
- * 3. Git-Repo initialisieren & committen
- * 4. GitHub-Repository erstellen
- * 5. Repository auf public setzen
- * 6. Git push zu GitHub
- * 7. QR-Code generieren (für die finale Vercel-URL)
+ * 2. HTML-Datei speichern (/projects/[id]/index.html)
+ * 3. DIREKT MIT VERCEL CLI DEPLOYEN (npx vercel --prod --token ...)
+ * 4. Echte Vercel-URL aus CLI-Output extrahieren
+ * 5. QR-Code generieren mit ECHTER Vercel-URL
+ * 6. QR-Code in src/public/qrcodes/ speichern (statisch erreichbar)
+ * 7. GitHub-Repository erstellen & pushen (für Backup)
  */
 app.post('/api/launch-project', async (req, res) => {
   const { title, type } = req.body;
@@ -151,11 +158,14 @@ app.post('/api/launch-project', async (req, res) => {
     return res.status(400).json({ error: 'Kein Template geladen. Bitte Template hochladen.' });
   }
 
+  if (!process.env.VERCEL_TOKEN) {
+    return res.status(400).json({ error: 'VERCEL_TOKEN nicht in .env konfiguriert' });
+  }
+
   try {
     const projectId = generateProjectId(title);
     const repoSlug = `hdw-${generateSlug(title)}`;
     const projectDir = path.join(__dirname, '..', 'projects', projectId);
-    const vercelUrl = `https://${repoSlug}.vercel.app`;
 
     console.log(`\n🚀 Starte Deployment Pipeline für: "${title}"`);
     console.log(`   Projekt-ID: ${projectId}`);
@@ -163,11 +173,14 @@ app.post('/api/launch-project', async (req, res) => {
 
     // ========== STEP 1: TITEL-INJEKTION ==========
     console.log('\n[STEP 1] Injiziere Titel in Template...');
+
+    // Temporärer Placeholder für die Injektion
+    const tempUrl = `https://${repoSlug}.vercel.app`;
     const htmlContent = injectMetadataIntoTemplate(currentTemplate, {
       title,
       type,
       projectId,
-      deploymentUrl: vercelUrl
+      deploymentUrl: tempUrl
     });
 
     // ========== STEP 2: DATEI SPEICHERN ==========
@@ -177,37 +190,7 @@ app.post('/api/launch-project', async (req, res) => {
     fs.writeFileSync(indexPath, htmlContent, 'utf-8');
     console.log(`   ✓ Datei: ${indexPath}`);
 
-    // ========== STEP 3: GIT INITIALISIEREN & COMMITTEN ==========
-    console.log('[STEP 3] Initialisiere Git-Repository...');
-
-    // Git config
-    executeGitCommand('git init', projectDir);
-    executeGitCommand('git config user.email "moritz@heavy-media.de"', projectDir);
-    executeGitCommand('git config user.name "HDW Launchpad"', projectDir);
-
-    // Erstelle .gitignore
-    fs.writeFileSync(
-      path.join(projectDir, '.gitignore'),
-      'node_modules/\n.env\n.vercel\n.DS_Store\n*.log\n',
-      'utf-8'
-    );
-
-    // Erstelle vercel.json für statisches Hosting
-    const vercelConfig = {
-      version: 2,
-      buildCommand: 'echo "Static deployment"',
-      public: true,
-      functions: {
-        'api/**': { runtime: 'nodejs18.x' }
-      }
-    };
-    fs.writeFileSync(
-      path.join(projectDir, 'vercel.json'),
-      JSON.stringify(vercelConfig, null, 2),
-      'utf-8'
-    );
-
-    // Erstelle package.json
+    // Erstelle package.json (Vercel braucht das)
     const packageJson = {
       name: repoSlug,
       version: '1.0.0',
@@ -220,69 +203,43 @@ app.post('/api/launch-project', async (req, res) => {
       'utf-8'
     );
 
-    // Git add & commit
-    executeGitCommand('git add .', projectDir);
-    executeGitCommand(`git commit -m "Auto-Deploy: ${title}"`, projectDir);
-    console.log('   ✓ Initial commit erstellt');
+    // ========== STEP 3: VERCEL DEPLOYMENT (DIREKT, NICHT VIA GITHUB) ==========
+    console.log('[STEP 3] Deploye direkt zu Vercel mit CLI...');
 
-    // ========== STEP 4: GITHUB REPOSITORY ERSTELLEN ==========
-    console.log('[STEP 4] Erstelle GitHub-Repository...');
-    let githubUrl = null;
-
+    let vercelUrl = null;
     try {
-      // Prüfe, ob Repo bereits existiert
-      const checkCmd = `gh repo view ${repoSlug} 2>&1`;
-      try {
-        execSync(checkCmd, { stdio: 'pipe' });
-        console.log(`   ℹ Repo existiert bereits: ${repoSlug}`);
-      } catch {
-        // Repo existiert nicht, erstelle es
-        const createCmd = `gh repo create ${repoSlug} --public --source=${projectDir} --remote=origin --push --description "${title} - ${type}"`;
-        execSync(createCmd, { stdio: 'pipe' });
-        console.log(`   ✓ Repository erstellt: ${repoSlug}`);
+      const vercelCmd = `npx vercel --prod --yes --token ${process.env.VERCEL_TOKEN}`;
+      const vercelOutput = execSync(vercelCmd, {
+        cwd: projectDir,
+        encoding: 'utf-8',
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+
+      console.log(`   Vercel Output: ${vercelOutput.substring(0, 200)}...`);
+
+      // Extrahiere echte Vercel-URL aus Output
+      vercelUrl = extractVercelUrl(vercelOutput);
+
+      if (!vercelUrl) {
+        throw new Error('Konnte Vercel-URL aus Output nicht extrahieren. Output: ' + vercelOutput);
       }
 
-      // Hole GitHub-Username für URL
-      const whoami = execSync('gh api user -q .login', { encoding: 'utf-8' }).trim();
-      githubUrl = `https://github.com/${whoami}/${repoSlug}`;
-    } catch (ghError) {
-      console.warn(`   ⚠ GitHub-Repo-Erstellung fehlgeschlagen: ${ghError.message}`);
+      console.log(`   ✓ Vercel Deployment erfolgreich!`);
+      console.log(`   ✓ Live-URL: ${vercelUrl}`);
+    } catch (vercelError) {
+      console.error(`   ✗ Vercel Deployment fehlgeschlagen: ${vercelError.message}`);
+      throw new Error(`Vercel Deployment fehlgeschlagen: ${vercelError.message}`);
     }
 
-    // ========== STEP 5: REPOSITORY AUF PUBLIC SETZEN ==========
-    console.log('[STEP 5] Stelle Repository auf public...');
-    try {
-      executeGitCommand(`gh repo edit ${repoSlug} --visibility public`, projectDir);
-      console.log('   ✓ Repository ist öffentlich');
-    } catch (error) {
-      console.warn(`   ⚠ Konnte Sichtbarkeit nicht ändern: ${error.message}`);
-    }
+    // ========== STEP 4: QR-CODE GENERIEREN (MIT ECHTER VERCEL-URL) ==========
+    console.log('[STEP 4] Generiere QR-Code für echte Vercel-URL...');
 
-    // ========== STEP 6: GIT PUSH ZU GITHUB ==========
-    console.log('[STEP 6] Pushe Code zu GitHub...');
-    try {
-      // Prüfe remote
-      try {
-        executeGitCommand('git remote get-url origin', projectDir);
-      } catch {
-        // Remote existiert nicht, erstelle es
-        executeGitCommand(`git remote add origin https://github.com/$(gh api user -q .login)/${repoSlug}.git`, projectDir);
-      }
+    const qrcodesDir = path.join(__dirname, 'public', 'qrcodes');
+    fs.mkdirSync(qrcodesDir, { recursive: true });
 
-      // Push zu GitHub
-      executeGitCommand('git branch -M main', projectDir);
-      executeGitCommand('git push -u origin main', projectDir);
-      console.log('   ✓ Code erfolgreich zu GitHub gepusht (Branch: main)');
-    } catch (pushError) {
-      console.warn(`   ⚠ Git Push fehlgeschlagen: ${pushError.message}`);
-    }
+    const qrFileName = `${repoSlug}.png`;
+    const qrPath = path.join(qrcodesDir, qrFileName);
 
-    // ========== STEP 7: QR-CODE GENERIEREN ==========
-    console.log('[STEP 7] Generiere QR-Code für Vercel-URL...');
-    const resourcesDir = path.join(projectDir, '.resources');
-    fs.mkdirSync(resourcesDir, { recursive: true });
-
-    const qrPath = path.join(resourcesDir, 'qr-code.png');
     await QRCode.toFile(qrPath, vercelUrl, {
       errorCorrectionLevel: 'H',
       type: 'image/png',
@@ -293,7 +250,58 @@ app.post('/api/launch-project', async (req, res) => {
         light: '#FFFFFF'
       }
     });
-    console.log(`   ✓ QR-Code generiert für: ${vercelUrl}`);
+
+    // Relativer Pfad für Frontend
+    const qrCodeUrl = `/qrcodes/${qrFileName}`;
+    console.log(`   ✓ QR-Code generiert: ${qrCodeUrl}`);
+
+    // ========== STEP 5: GIT INIT & COMMIT (FÜR GITHUB BACKUP) ==========
+    console.log('[STEP 5] Initialisiere Git-Repository (für GitHub-Backup)...');
+
+    try {
+      executeGitCommand('git init', projectDir);
+      executeGitCommand('git config user.email "moritz@heavy-media.de"', projectDir);
+      executeGitCommand('git config user.name "HDW Launchpad"', projectDir);
+
+      // Erstelle .gitignore
+      fs.writeFileSync(
+        path.join(projectDir, '.gitignore'),
+        'node_modules/\n.env\n.vercel\n.DS_Store\n*.log\n',
+        'utf-8'
+      );
+
+      // Git add & commit
+      executeGitCommand('git add .', projectDir);
+      executeGitCommand(`git commit -m "Auto-Deploy: ${title}"`, projectDir);
+      console.log('   ✓ Git-Repository initialisiert & committed');
+    } catch (gitError) {
+      console.warn(`   ⚠ Git-Fehler: ${gitError.message}`);
+    }
+
+    // ========== STEP 6: GITHUB REPOSITORY ERSTELLEN & PUSHEN ==========
+    console.log('[STEP 6] Erstelle GitHub-Repository & pushe Code...');
+    let githubUrl = null;
+
+    try {
+      // Prüfe, ob Repo bereits existiert
+      try {
+        execSync(`gh repo view ${repoSlug}`, { stdio: 'pipe' });
+        console.log(`   ℹ GitHub-Repo existiert bereits: ${repoSlug}`);
+      } catch {
+        // Repo existiert nicht, erstelle es
+        const createCmd = `gh repo create ${repoSlug} --public --source=${projectDir} --remote=origin --push --description "${title} - ${type}"`;
+        execSync(createCmd, { stdio: 'pipe' });
+        console.log(`   ✓ GitHub-Repository erstellt & gepusht`);
+      }
+
+      // Hole GitHub-Username für URL
+      const whoami = execSync('gh api user -q .login', { encoding: 'utf-8' }).trim();
+      githubUrl = `https://github.com/${whoami}/${repoSlug}`;
+      console.log(`   ✓ GitHub-Repo URL: ${githubUrl}`);
+    } catch (ghError) {
+      console.warn(`   ⚠ GitHub-Fehler (optional): ${ghError.message}`);
+      githubUrl = 'GitHub-Push optional (Vercel ist bereits live!)';
+    }
 
     // ========== SPEICHERE PROJEKT-METADATEN ==========
     const projectMeta = {
@@ -304,6 +312,7 @@ app.post('/api/launch-project', async (req, res) => {
       vercelUrl,
       githubUrl,
       repoSlug,
+      qrCodeUrl,
       localPath: projectDir,
       status: 'deployed'
     };
@@ -319,8 +328,8 @@ app.post('/api/launch-project', async (req, res) => {
 
     console.log(`\n✅ DEPLOYMENT ERFOLGREICH!`);
     console.log(`   Vercel-URL: ${vercelUrl}`);
-    console.log(`   GitHub-Repo: ${githubUrl}`);
-    console.log(`   QR-Code: ${qrPath}\n`);
+    console.log(`   QR-Code-URL: ${qrCodeUrl}`);
+    console.log(`   GitHub-Repo: ${githubUrl}\n`);
 
     res.json({
       success: true,
@@ -330,15 +339,15 @@ app.post('/api/launch-project', async (req, res) => {
       vercelUrl,
       githubUrl,
       repoSlug,
-      qrCodePath: qrPath,
+      qrCodeUrl,
       localPath: projectDir,
-      message: '✅ Projekt erfolgreich deployed! QR-Code wurde generiert.'
+      message: '✅ Projekt erfolgreich auf Vercel deployed!'
     });
   } catch (error) {
     console.error('\n❌ Deployment fehlgeschlagen:', error.message);
     res.status(500).json({
       error: error.message,
-      hint: 'Stelle sicher, dass du `gh auth login` ausgeführt hast und GitHub CLI korrekt konfiguriert ist.'
+      hint: 'Stelle sicher, dass VERCEL_TOKEN in .env gesetzt ist und `gh auth login` ausgeführt wurde.'
     });
   }
 });

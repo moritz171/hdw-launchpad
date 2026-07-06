@@ -398,25 +398,27 @@
       addLog(`✅ DEPLOYMENT ERFOLGREICH!`, 'success');
       addLog(`Projekt-ID: ${project.projectId}`, 'success');
 
-      // Show QR Code
+      // Show QR Code mit echtem Pfad vom Backend
       setTimeout(() => {
-        qrImage.src = project.qrCodePath;
+        // Nutze den qrCodeUrl vom Backend (z.B. "/qrcodes/hdw-xyz.png")
+        const qrImageUrl = project.qrCodeUrl || `/qrcodes/${project.repoSlug}.png`;
+        console.log('QR-Code URL:', qrImageUrl);
+
+        qrImage.src = qrImageUrl;
+        qrImage.alt = `QR-Code für ${project.vercelUrl}`;
+
         noQrPlaceholder.classList.add('hidden');
         qrContainer.classList.remove('hidden');
         downloadQrBtn.classList.remove('hidden');
+
         downloadQrBtn.onclick = () => {
-          // Starte Download via Backend
-          fetch(`/api/download-qr/${project.projectId}`)
-            .then(r => r.blob())
-            .then(blob => {
-              const url = window.URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = `qr-${project.projectId}.png`;
-              document.body.appendChild(a);
-              a.click();
-              a.remove();
-            });
+          // Download QR-Code als PNG
+          const a = document.createElement('a');
+          a.href = qrImageUrl;
+          a.download = `qr-${project.repoSlug}.png`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
         };
 
         // Show deployment URL
@@ -425,7 +427,9 @@
         deploymentLink.textContent = project.vercelUrl;
 
         addLog(`🌐 Live-URL: ${project.vercelUrl}`, 'success');
-        addLog(`📦 GitHub-Repo: ${project.githubUrl}`, 'success');
+        if (project.githubUrl && !project.githubUrl.includes('optional')) {
+          addLog(`📦 GitHub-Repo: ${project.githubUrl}`, 'success');
+        }
         addLog(`🎯 QR-Code generiert und bereit zum Download`, 'success');
 
         // Status LEDs animieren
@@ -433,6 +437,8 @@
         document.getElementById('statusLed1').classList.add('bg-green-500/50');
         document.getElementById('statusLed2').classList.remove('bg-yellow-500/50');
         document.getElementById('statusLed2').classList.add('bg-green-500/50');
+        document.getElementById('statusLed3').classList.remove('bg-green-500/50');
+        document.getElementById('statusLed3').classList.add('bg-green-500');
 
         addLog('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         addLog('🎉 ALLES READY! Projekt ist live auf Vercel.', 'success');
