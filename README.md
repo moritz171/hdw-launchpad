@@ -52,16 +52,35 @@ vercel --prod
 
 ## 🔐 Authentifizierung
 
-### GitHub
+### Setup Vercel Token (ERFORDERLICH)
+
+1. **Token erstellen:**
+   ```bash
+   vercel token create hdw-launchpad
+   ```
+
+2. **.env konfigurieren:**
+   ```bash
+   cp .env.example .env
+   # Öffne .env und füge den Token ein:
+   # VERCEL_TOKEN=vercel_xxxxxxxxxxxxx
+   ```
+
+3. **Server neustarten:**
+   ```bash
+   PORT=3001 npm run dev
+   ```
+
+### GitHub (Optional, für Backup)
 ```bash
 gh auth login
 # Wähle "HTTPS" und "Y" für Token
 ```
 
-### Vercel
-```bash
-vercel login
-```
+### Public Deployments
+✅ Alle Deployments sind automatisch **PUBLIC** (kein Vercel-Login erforderlich)
+- Flag `--public` wird automatisch beim Vercel-Deploy gesetzt
+- Jedes Projekt ist sofort nach dem Deployment öffentlich erreichbar
 
 ## 📡 API Endpoints
 

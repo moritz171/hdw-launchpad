@@ -208,14 +208,18 @@ app.post('/api/launch-project', async (req, res) => {
 
     let vercelUrl = null;
     try {
-      const vercelCmd = `npx vercel --prod --yes --token ${process.env.VERCEL_TOKEN}`;
+      // --public Flag stellt sicher, dass die Seite ÖFFENTLICH ist (ohne Vercel-Login)
+      const vercelCmd = `npx vercel --prod --yes --public --token ${process.env.VERCEL_TOKEN}`;
+      console.log(`   Executing: npx vercel --prod --yes --public --token [TOKEN]`);
+
       const vercelOutput = execSync(vercelCmd, {
         cwd: projectDir,
         encoding: 'utf-8',
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
+        timeout: 120000  // 2 Minuten Timeout für Vercel-Deployment
       });
 
-      console.log(`   Vercel Output: ${vercelOutput.substring(0, 200)}...`);
+      console.log(`   Vercel Output erhalten (${vercelOutput.length} Bytes)`);
 
       // Extrahiere echte Vercel-URL aus Output
       vercelUrl = extractVercelUrl(vercelOutput);
@@ -225,7 +229,8 @@ app.post('/api/launch-project', async (req, res) => {
       }
 
       console.log(`   ✓ Vercel Deployment erfolgreich!`);
-      console.log(`   ✓ Live-URL: ${vercelUrl}`);
+      console.log(`   ✓ Live-URL (PUBLIC): ${vercelUrl}`);
+      console.log(`   ✓ Deployment Protection: DISABLED (--public Flag)`);
     } catch (vercelError) {
       console.error(`   ✗ Vercel Deployment fehlgeschlagen: ${vercelError.message}`);
       throw new Error(`Vercel Deployment fehlgeschlagen: ${vercelError.message}`);
