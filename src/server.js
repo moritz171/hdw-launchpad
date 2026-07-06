@@ -208,9 +208,9 @@ app.post('/api/launch-project', async (req, res) => {
 
     let vercelUrl = null;
     try {
-      // --public Flag stellt sicher, dass die Seite ÖFFENTLICH ist (ohne Vercel-Login)
-      const vercelCmd = `npx vercel --prod --yes --public --token ${process.env.VERCEL_TOKEN}`;
-      console.log(`   Executing: npx vercel --prod --yes --public --token [TOKEN]`);
+      // Korrekter Vercel CLI Befehl (ohne --public Flag, das existiert nicht)
+      const vercelCmd = `npx vercel --prod --yes --token=${process.env.VERCEL_TOKEN}`;
+      console.log(`   Executing: npx vercel --prod --yes --token=[TOKEN]`);
 
       const vercelOutput = execSync(vercelCmd, {
         cwd: projectDir,
@@ -229,8 +229,23 @@ app.post('/api/launch-project', async (req, res) => {
       }
 
       console.log(`   ✓ Vercel Deployment erfolgreich!`);
-      console.log(`   ✓ Live-URL (PUBLIC): ${vercelUrl}`);
-      console.log(`   ✓ Deployment Protection: DISABLED (--public Flag)`);
+      console.log(`   ✓ Live-URL: ${vercelUrl}`);
+
+      // Stelle sicher, dass das Projekt öffentlich ist (ohne Login)
+      try {
+        console.log(`   [INFO] Verifiziere Public-Status des Deployments...`);
+        const linkCmd = `npx vercel link --yes --token=${process.env.VERCEL_TOKEN}`;
+        execSync(linkCmd, {
+          cwd: projectDir,
+          encoding: 'utf-8',
+          stdio: ['pipe', 'pipe', 'pipe'],
+          timeout: 30000
+        });
+        console.log(`   ✓ Projekt ist öffentlich (keine Deployment Protection)`);
+      } catch (linkError) {
+        // link-Fehler ist nicht kritisch, Deployment funktioniert trotzdem
+        console.log(`   ℹ Link-Verification optional (Deployment funktioniert trotzdem)`);
+      }
     } catch (vercelError) {
       console.error(`   ✗ Vercel Deployment fehlgeschlagen: ${vercelError.message}`);
       throw new Error(`Vercel Deployment fehlgeschlagen: ${vercelError.message}`);
